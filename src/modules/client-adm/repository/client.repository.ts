@@ -1,3 +1,4 @@
+import { DataTypes } from "sequelize";
 import Address from "../../@shared/domain/value-object/address";
 import Id from "../../@shared/domain/value-object/id.value-object";
 import Client from "../domain/client.entity";
@@ -8,8 +9,8 @@ export default class ClientRepository implements ClientGateway {
 
   async add(entity: Client): Promise<void> {
 
-    await ClientModel.create({
-      id: entity.id.id,
+    const input = {
+      id: entity.id?.id,
       name: entity.name,
       email: entity.email,
       document: entity.document,
@@ -19,19 +20,23 @@ export default class ClientRepository implements ClientGateway {
       city: entity.address.city,
       state: entity.address.state,
       zipcode: entity.address.zipCode,
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt
-    })
+      createdAt: new Date(entity.createdAt),
+      updatedAt: new Date(entity.updatedAt)
+    };
+    
+    await ClientModel.create(input)
+    
   }
 
   async find(id: string): Promise<Client> {
 
-    const client = await ClientModel.findOne({ where: { id } })
-
+    const client = await ClientModel.findOne({raw: true, where: { id } })
+    
     if (!client) {
       throw new Error("Client not found")
     }
 
+    
     return new Client({
       id: new Id(client.id),
       name: client.name,

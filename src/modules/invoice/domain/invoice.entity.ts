@@ -19,7 +19,7 @@ export default class Invoice extends BaseEntity implements AggregateRoot {
     private _name: string;
     private _document: string;
     private _address: Address;
-    private _items: InvoiceItems[];
+    private _items: InvoiceItems[] = [];
      
     
     constructor(props: InvoiceProps) {

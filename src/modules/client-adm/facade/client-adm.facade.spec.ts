@@ -53,7 +53,7 @@ describe("Client Adm Facade test", () => {
 
     await facade.add(input)
 
-    const client = await ClientModel.findOne({ where: { id: "1" } })
+    const client = await ClientModel.findOne({raw: true, where: { id: "1" } })
 
     expect(client).toBeDefined()
     expect(client.id).toBe(input.id)
@@ -64,15 +64,7 @@ describe("Client Adm Facade test", () => {
   })
 
   it("should find a client", async () => {
-
-    // const repository = new ClientRepository()
-    // const addUsecase = new AddClientUseCase(repository)
-    // const findUseCase = new FindClientUseCase(repository)
-    // const facade = new ClientAdmFacade({
-    //   addUseCase: addUsecase,
-    //   findUseCase: findUseCase
-    // })
-
+   
     const facade = ClientAdmFacadeFactory.create()
 
     const input = {

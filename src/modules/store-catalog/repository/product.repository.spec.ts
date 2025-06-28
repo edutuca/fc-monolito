@@ -1,39 +1,38 @@
-import { Sequelize } from "sequelize-typescript";
-import ProductModel from "./product.model";
+
+import { migration, sequelize, setupDbUmzug } from "../../@shared/config/express";
+import { ProductCatalogModel } from "./product-catalog.model";
 import ProductRepository from "./product.repository";
 
 describe("ProductRepository test", () => {
-  let sequelize: Sequelize;
 
-  beforeEach(async () => {
-    sequelize = new Sequelize({
-      dialect: "sqlite",
-      storage: ":memory:",
-      logging: false,
-      sync: { force: true },
-    });
-
-    await sequelize.addModels([ProductModel]);
-    await sequelize.sync();
-  });
-
-  afterEach(async () => {
-    await sequelize.close();
-  });
+    beforeEach(async()=>{
+      await setupDbUmzug();
+    })
+  
+    afterEach(async () => {
+       if (!migration || !sequelize) {
+         return 
+       }
+  
+       await migration.down()
+       await sequelize.close()
+    });  
 
   it("should find all products", async () => {
-    await ProductModel.create({
+     await  ProductCatalogModel.create({
       id: "1",
       name: "Product 1",
       description: "Description 1",
       salesPrice: 100,
+      createdAt: new Date()
     });
 
-    await ProductModel.create({
+    await ProductCatalogModel.create({
       id: "2",
       name: "Product 2",
       description: "Description 2",
       salesPrice: 200,
+      createdAt: new Date()
     });
 
     const productRepository = new ProductRepository();
@@ -51,11 +50,13 @@ describe("ProductRepository test", () => {
   });
 
   it("should find a product", async () => {
-    await ProductModel.create({
+
+    await ProductCatalogModel.create({
       id: "1",
       name: "Product 1",
       description: "Description 1",
       salesPrice: 100,
+      createdAt: new Date()
     });
 
     const productRepository = new ProductRepository();

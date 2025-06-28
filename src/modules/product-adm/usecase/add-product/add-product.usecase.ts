@@ -4,9 +4,10 @@ import ProductGateway from "../../gateway/product.gateway";
 import { AddProductInputDto, AddProductOutputDto } from "./add-product.dto";
 
 export default class AddProductUseCase {
-  private _productRepository: ProductGateway;
+    private _productRepository: ProductGateway;
 
-  constructor(_productRepository: ProductGateway) {
+  constructor(
+    _productRepository: ProductGateway) {
     this._productRepository = _productRepository;
   }
 
@@ -21,6 +22,7 @@ export default class AddProductUseCase {
 
     const product = new Product(props);
     this._productRepository.add(product);
+
 
     return {
       id: product.id.id,

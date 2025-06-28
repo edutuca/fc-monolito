@@ -1,11 +1,10 @@
-import { CreatedAt, Model, UpdatedAt } from "sequelize-typescript";
+import Address from "../../@shared/domain/value-object/address";
+import Id from "../../@shared/domain/value-object/id.value-object";
+import InvoiceItems from "../domain/invoice-items.entity";
 import Invoice from "../domain/invoice.entity";
 import InvoiceGateway from "../gateway/invoice.gateway";
 import { InvoiceItemModel } from "./invoice-item.model";
 import { InvoiceModel } from "./invoice.model";
-import Id from "../../@shared/domain/value-object/id.value-object";
-import Address from "../../@shared/domain/value-object/address";
-import InvoiceItems from "../domain/invoice-items.entity";
 
 
 export default class InvoiceRepository implements InvoiceGateway {
@@ -56,7 +55,7 @@ export default class InvoiceRepository implements InvoiceGateway {
         updatedAt: invoice.createdAt
       });
 
-      invoiceCreated.items.forEach(item=>
+      invoiceCreated?.items?.forEach(item=>
         invoiceReturn.items.push(new InvoiceItems({
           id: new Id(item.id),
           name: item.name,
@@ -71,7 +70,7 @@ export default class InvoiceRepository implements InvoiceGateway {
 
     async find(id: string): Promise<Invoice> {
 
-          const invoice = await InvoiceModel.findOne({ where: { id }, include: InvoiceItemModel })
+          const invoice = await InvoiceModel.findOne({where: { id }, include: InvoiceItemModel })
       
           if (!invoice) {
             throw new Error("Invoice not found")
@@ -91,10 +90,10 @@ export default class InvoiceRepository implements InvoiceGateway {
             ),
             items: [],
             createdAt: invoice.createdAt,
-            updatedAt: invoice.createdAt
+            updatedAt: invoice.updatedAt
           });
 
-          invoice.items.forEach(item=>
+          invoice?.items?.forEach(item=>
             invoiceReturn.items.push(new InvoiceItems({
               id: new Id(item.id),
               name: item.name,

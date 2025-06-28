@@ -1,32 +1,27 @@
-import { Sequelize } from "sequelize-typescript"
+import { migration, sequelize, setupDbUmzug } from "../../@shared/config/express"
 import Address from "../../@shared/domain/value-object/address"
 import Id from "../../@shared/domain/value-object/id.value-object"
 import InvoiceItems from "../domain/invoice-items.entity"
 import Invoice from "../domain/invoice.entity"
+import { InvoiceItemModel } from "./invoice-item.model"
 import { InvoiceModel } from "./invoice.model"
 import InvoiceRepository from "./invoice.repository"
-import { InvoiceItemModel } from "./invoice-item.model"
+
 
 describe("Invoice Repository test", () => {
 
-  let sequelize: Sequelize
-
-  beforeEach(async () => {
-    sequelize = new Sequelize({
-      dialect: 'sqlite',
-      storage: ':memory:',
-      logging: false,
-      sync: { force: true }
-    })
-
-    sequelize.addModels([InvoiceModel, InvoiceItemModel])
-
-    await sequelize.sync()
+  beforeEach(async()=>{
+      await setupDbUmzug();
   })
 
   afterEach(async () => {
-    await sequelize.close()
-  })
+     if (!migration || !sequelize) {
+       return 
+     }
+
+     await migration.down()
+     await sequelize.close()
+  });  
 
   it("should create a invoice", async () => {
 
@@ -108,17 +103,17 @@ describe("Invoice Repository test", () => {
     const repository = new InvoiceRepository();
     const result:Invoice = await repository.find("3");
 
-    expect(result.id.id).toEqual(invoice.id)
-    expect(result.name).toEqual(invoice.name)
-    expect(result.address.street).toEqual(invoice.street)
-    expect(result.address.number).toEqual(invoice.number)
-    expect(result.address.complement).toEqual(invoice.complement)
-    expect(result.address.city).toEqual(invoice.city)
-    expect(result.address.state).toEqual(invoice.state)
-    expect(result.address.zipCode).toEqual(invoice.zipCode)
-    expect(result.createdAt).toStrictEqual(invoice.createdAt)
-    expect(result.updatedAt).toStrictEqual(invoice.updatedAt)
-    expect(result.items != null).toBeTruthy()
-    expect(result.items.length).toBeGreaterThan(1)
+   expect(result.id.id).toEqual(invoice.id)
+   expect(result.name).toEqual(invoice.name)
+   expect(result.address.street).toEqual(invoice.street)
+   expect(result.address.number).toEqual(invoice.number)
+   expect(result.address.complement).toEqual(invoice.complement)
+   expect(result.address.city).toEqual(invoice.city)
+   expect(result.address.state).toEqual(invoice.state)
+   expect(result.address.zipCode).toEqual(invoice.zipCode)
+   expect(new Date(result.createdAt)).toStrictEqual(invoice.createdAt)
+   expect(new Date(result.updatedAt)).toStrictEqual(invoice.updatedAt)
+   expect(result.items != null).toBeTruthy()
+   expect(result.items.length).toBeGreaterThan(1)
   })
 })

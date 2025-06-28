@@ -10,27 +10,27 @@ import { InvoiceModel } from "./invoice.model";
         
       @PrimaryKey
       @Column({ allowNull: false })         
-      id: string;
+      declare id: string;
 
       @Column({ allowNull: false })
-      name: string;
+      declare name: string;
 
       @Column({ allowNull: false })
-      price: number;
+      declare price: number;
 
       @Column({ allowNull: false })
-      createdAt: Date;
+      declare createdAt: Date;
 
       @Column({ allowNull: false })
-      updatedAt: Date;
+      declare updatedAt: Date;
 
       @ForeignKey(() => InvoiceModel)
       @Column({
          type: DataType.STRING,
          allowNull: true,
       })
-      invoiceId: string;
+      declare invoiceId: string;
 
       @BelongsTo(()=>InvoiceModel)
-      invoice:InvoiceModel;
+      declare invoice:InvoiceModel;
     }

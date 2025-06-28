@@ -10,35 +10,36 @@ export class ClientModel extends Model {
   id: string
 
   @Column({ allowNull: false })
-  name: string
+  declare name: string
 
   @Column({ allowNull: false })
-  email: string
+  declare email: string
 
   @Column({ allowNull: false })
-  document: string
+  declare document: string
 
   @Column({ allowNull: false })
-  street: string
+  declare street: string
 
   @Column({ allowNull: false })
-  number: string
+  declare number: string
 
   @Column({ allowNull: true })
-  complement: string
+  declare complement: string
 
   @Column({ allowNull: false })
-  city: string
+  declare city: string
 
   @Column({ allowNull: false })
-  state: string
+  declare state: string
 
   @Column({ allowNull: false })
-  zipcode: string
+  declare zipcode: string
 
-  @Column({ allowNull: false })
-  createdAt: Date
+  @Column({ allowNull: false})
+  declare createdAt: Date
 
-  @Column({ allowNull: false })
-  updatedAt: Date
+  @Column({ allowNull: false})
+  declare updatedAt: Date
+
 }

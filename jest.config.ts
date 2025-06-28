@@ -2,12 +2,12 @@
  * For a detailed explanation regarding each configuration property and type check, visit:
  * https://jestjs.io/docs/configuration
  */
-
 export default {
   transform: {
     "^.+\.(t|j)sx?$": ["@swc/jest"],
     
   },
+  testTimeout: 10000, // 8 seconds
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
@@ -195,4 +195,5 @@ export default {
 
   // Whether to use watchman for file crawling
   // watchman: true,
+  
 };

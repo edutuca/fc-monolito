@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize-typescript";
 import StoreCatalogFacadeFactory from "../factory/facade.factory";
-import ProductModel from "../repository/product.model";
+import { ProductCatalogModel } from "../repository/product-catalog.model";
 
 describe("StoreCatalogFacade test", () => {
   let sequelize: Sequelize;
@@ -13,7 +13,7 @@ describe("StoreCatalogFacade test", () => {
       sync: { force: true },
     });
 
-    await sequelize.addModels([ProductModel]);
+    await sequelize.addModels([ProductCatalogModel]);
     await sequelize.sync();
   });
 
@@ -23,11 +23,12 @@ describe("StoreCatalogFacade test", () => {
 
   it("should find a product", async () => {
     const facade = StoreCatalogFacadeFactory.create();
-    await ProductModel.create({
+    await ProductCatalogModel.create({
       id: "1",
       name: "Product 1",
       description: "Description 1",
       salesPrice: 100,
+      createdAt: new Date()
     });
 
     const result = await facade.find({ id: "1" });
@@ -36,21 +37,24 @@ describe("StoreCatalogFacade test", () => {
     expect(result.name).toBe("Product 1");
     expect(result.description).toBe("Description 1");
     expect(result.salesPrice).toBe(100);
+
   });
 
   it("should find all products", async () => {
     const facade = StoreCatalogFacadeFactory.create();
-    await ProductModel.create({
+    await ProductCatalogModel.create({
       id: "1",
       name: "Product 1",
       description: "Description 1",
       salesPrice: 100,
+      createdAt: new Date()
     });
-    await ProductModel.create({
+    await ProductCatalogModel.create({
       id: "2",
       name: "Product 2",
       description: "Description 2",
       salesPrice: 200,
+      createdAt: new Date()
     });
 
     const result = await facade.findAll();
@@ -64,5 +68,6 @@ describe("StoreCatalogFacade test", () => {
     expect(result.products[1].name).toBe("Product 2");
     expect(result.products[1].description).toBe("Description 2");
     expect(result.products[1].salesPrice).toBe(200);
+
   });
 });

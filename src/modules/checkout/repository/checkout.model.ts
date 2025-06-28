@@ -1,20 +1,20 @@
 import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 @Table({
-  tableName: "products",
+  tableName: "order",
   timestamps: false,
 })
-export default class ProductModel extends Model {
+export default class OrderModel extends Model {
   @PrimaryKey
   @Column({ allowNull: false })
-  id: string;
+  declare id: string;
 
   @Column({ allowNull: false })
-  name: string;
-
+  declare idClient: string;
+  
   @Column({ allowNull: false })
-  description: string;
-
+  declare idProduct: string;
+  
   @Column({ allowNull: false })
-  salesPrice: number;
+  declare status: string;
 }
